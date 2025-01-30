@@ -3,7 +3,7 @@
 <mapper namespace="com.api.estate.api.common.mapper.DistrictMapper">
 
     <resultMap id="districtInfo" type="com.api.estate.api.common.vo.DistrictVo">
-        <result column="매물코드" property="memulcode" jdbcType="VARCHAR"/>
+        <result column="매물코드" property="memulCode" jdbcType="VARCHAR"/>
     </resultMap>
 
     <select id="getDistrictList" resultMap="districtInfo">

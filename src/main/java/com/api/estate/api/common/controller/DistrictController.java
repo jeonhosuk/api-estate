@@ -1,6 +1,6 @@
 package com.api.estate.api.common.controller;
 
-import com.api.estate.api.common.dto.DistrictDto;
+import com.api.estate.api.common.dto.DistrictRespDto;
 import com.api.estate.api.common.service.DistrictService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,7 +23,7 @@ public class DistrictController {
 
     @Operation(summary = "지역정보 리스트", description = "지역정보 조회 API")
     @GetMapping("/district")
-    public DistrictDto district(){
+    public DistrictRespDto district(){
         return districtService.districtInfo();
     }
 }

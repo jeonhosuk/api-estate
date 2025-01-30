@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class DistrictVo {
-    private String memulcode           = "";     //매물코드
+    private String memulCode           = "";     //매물코드
 }

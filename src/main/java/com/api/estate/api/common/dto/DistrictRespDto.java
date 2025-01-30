@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DistrictDto {
+public class DistrictRespDto {
 
 //    @Schema(title = "내가격 정보")
     private String memulCode;

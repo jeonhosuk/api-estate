@@ -1,7 +1,7 @@
 package com.api.estate.api.common.service;
 
 
-import com.api.estate.api.common.dto.DistrictDto;
+import com.api.estate.api.common.dto.DistrictRespDto;
 import com.api.estate.api.common.mapper.DistrictMapper;
 import com.api.estate.api.common.vo.DistrictVo;
 import lombok.extern.slf4j.Slf4j;
@@ -17,11 +17,14 @@ public class DistrictService {
         this.districtMapper = districtMapper;
     }
 
-    public DistrictDto districtInfo(){
+    public DistrictRespDto districtInfo(){
 
         List<DistrictVo> districtList = districtMapper.getDistrictList();
+        log.info("getDistrictList : {}", districtList);
 
-        return DistrictDto.builder()
+
+        return DistrictRespDto.builder()
+                .memulCode(districtList.get(0).getMemulCode())
                 .build();
     }
 
