@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.api.estate.api.district.mapper.DistrictMapper">
 
     <resultMap id="districtInfo" type="com.api.estate.api.district.vo.DistrictVo">
@@ -10,13 +10,13 @@
         <choose>
             <when test= "level == '도시'">
                 SELECT 도시 AS district_name
-                FROM moduwww.주소기본정보 A
+                FROM moduwww.modu.주소기본정보 A
                 GROUP BY 도시
-                ORDER BY (SELECT CAST(키1 AS INT) FROM MODUWWW.코드정보 Z WHERE 항번 = '1' AND Z.내용 = A.도시)
+                ORDER BY (SELECT CAST(키1 AS INT) FROM MODUWWW.modu.코드정보 Z WHERE 항번 = '1' AND Z.내용 = A.도시)
             </when>
             <when test= "level == '구시군'">
                 SELECT 구시군 AS district_name
-                FROM moduwww.주소기본정보
+                FROM moduwww.modu.주소기본정보
                 WHERE 도시 = #{addr1}
                 AND 구시군 IS NOT NULL
                 AND 구시군 != ''
@@ -25,7 +25,7 @@
             </when>
             <when test= "level == '읍면동'">
                 SELECT 읍면동 AS district_name
-                FROM moduwww.주소기본정보
+                FROM moduwww.modu.주소기본정보
                 WHERE 도시 = #{addr1}
                 AND 구시군 = #{addr2}
                 AND 읍면동 IS NOT NULL AND 읍면동 != ''

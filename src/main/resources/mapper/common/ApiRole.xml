@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.api.estate.api.common.mapper.ApiRoleMapper">
+
+    <select id="getApiUseYn" parameterType="string" resultType="string">
+        SELECT top 1 use_yn
+        FROM moduetc.modu.api_key_role
+        WHERE apikey =  #{apiKey}
+        Order by reg_date desc;
+    </select>
+
+    <select id="getApiListUseYn" parameterType="string" resultType="string">
+        SELECT use_yn
+        FROM moduetc.modu.api_key_role_code a
+        INNER JOIN moduetc.modu.api_key_role_list b ON a.code = b.code
+        WHERE b.apikey = #{apiKey}
+        AND a.api_nm =  #{apiName}
+    </select>
+
+</mapper>

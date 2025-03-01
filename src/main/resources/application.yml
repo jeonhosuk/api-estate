@@ -7,6 +7,14 @@ server:
             charset: utf-8
 
 spring:
+    profiles:
+        active: mssql
+
+---
+spring:
+    config:
+        activate:
+            on-profile: mariadb
     datasource:
         driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
         url: jdbc:log4jdbc:mariadb://218.237.65.224:3306/modubiz
@@ -18,6 +26,24 @@ spring:
         sql:
             init:
                 platform: mariadb
+
+---
+spring:
+    config:
+        activate:
+            on-profile: mssql
+    datasource:
+        driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+        url: jdbc:log4jdbc:sqlserver://222.112.162.227:1433;databasename=modubiz;encrypt=true;trustServerCertificate=true
+        username: modu
+        password: modu!@#
+
+        datasource:
+            driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+            url: jdbc:log4jdbc:sqlserver://222.112.162.227:1433;databasename=modumemul;encrypt=true;trustServerCertificate=true
+            username: modu
+            password: modu!@#
+
 mybatis:
     config-location: classpath:config/mybatis-config.xml
     mapper-locations: classpath*:mapper/**/*.xml
@@ -50,3 +76,7 @@ springdoc:
         doc-expansion: none # tag, operation 펼치는 방식
     paths-to-match:
         - /**
+
+
+
+    # 4ea3dc76ae748e173148548cfdb4d5feb51c6b778ad92f8a53dfa488ee7a8819

@@ -6,8 +6,6 @@ import com.api.estate.api.district.dto.DistrictRespDto;
 import com.api.estate.api.district.service.DistrictService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name="공통 API")
 @Slf4j
 @RestController           
-@RequestMapping("/v1")   
+@RequestMapping("/v1")
 public class DistrictController {
 
     private final DistrictService districtService;  //서비스 파일에 생성한 클래스를 DI(생성자주입)
