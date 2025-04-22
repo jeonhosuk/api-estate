@@ -9,15 +9,22 @@ import lombok.Data;
 @Schema(description = "common response")
 public class ResponseDto<T> {
 
-    @Schema(description = "api response code")
-    private int code;
-
-    @Schema(description = "api name")
-    private String api_description;
-
-    @Schema(description = "api msg", example = "OK/error")
-    private String status; //에러 또는 성공 메세지 제공
+    @Schema(description = "메타 정보")
+    private Meta meta;
 
     @Schema(description = "body data")
-    private T body;
+    private T document;
+
+    @Data
+    @Builder
+    public static class Meta {
+        @Schema(description = "API 설명")
+        private String api_description;
+
+        @Schema(description = "API 상태", example = "OK/error")
+        private String status;
+
+        @Schema(description = "응답 시간", example = "20250302215141")
+        private String response_time;
+    }
 }

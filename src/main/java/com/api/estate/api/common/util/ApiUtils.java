@@ -1,5 +1,8 @@
 package com.api.estate.api.common.util;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class ApiUtils {
     private ApiUtils() {
         // 유틸리티 클래스는 인스턴스화 방지
@@ -18,4 +21,10 @@ public class ApiUtils {
         String[] parts = uri.split("/");
         return parts.length > 0 ? parts[parts.length - 1] : "";
     }
+    public static String currentTime(){
+        String currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+
+        return currentTime;
+    }
+    
 }
