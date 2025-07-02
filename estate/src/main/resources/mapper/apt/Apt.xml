@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.api.estate.api.apt.mapper.AptComplexMapper">
+
+    <resultMap id="aptComplexResultMap" type="com.api.estate.api.apt.vo.AptComplexVo">
+        <constructor>
+            <arg column="아파트코드" javaType="java.lang.String"/>
+            <arg column="아파트명" javaType="java.lang.String"/>
+            <arg column="도시" javaType="java.lang.String"/>
+            <arg column="구시군" javaType="java.lang.String"/>
+            <arg column="읍면동" javaType="java.lang.String"/>
+        </constructor>
+    </resultMap>
+
+    <select id="getComplexList" resultMap="aptComplexResultMap">
+            WITH CTE_ApartmentInfo AS (
+              SELECT
+                ST1.아파트코드,
+                ST1.아파트명,
+                ST1.도시,
+                ST1.구시군,
+                ST1.읍면동,
+                CONCAT(CAST(CAST(ROUND(MT.주택형, 2) AS DECIMAL(10,2)) AS VARCHAR(30)) , MT.평형타입) AS 분양면적,
+                CONCAT(CAST(CAST(MT.평형 AS INT) AS VARCHAR(30)) , MT.평형타입) AS 평형,
+                ST1.총세대수,
+                MT.세대수,
+                MT.현관구조,
+                MT.방수,
+                MT.욕실수,
+                REGEXP_REPLACE(ST2.동, '^0+', '') AS 동,
+                GROUP_CONCAT(DISTINCT REGEXP_REPLACE(ST2.호, '^0+', '') ORDER BY ST2.호 SEPARATOR ', ') AS 동호수,
+                ST1.난방연료,
+                ST1.난방방식,
+                ST1.입주연도,
+                ifnull((select kapt_code from BT_DATA_LOAD.t_repub_d017100_RAW sb1
+                    where sb1.APT_CD = MT.아파트코드 limit 1),'') as kapt_code,
+                GROUP_CONCAT( MT.평형 , '$', MT.평형타입, '$', CONVERT( MT.주택형, CHAR(20) ), '$', CONVERT( IFNULL( MT.세대별전용면적, 0 ), CHAR(20) ) SEPARATOR '|') AS pyInfo,
+                ROW_NUMBER() OVER (ORDER BY ST1.아파트코드, MT.주택형, MT.평형타입, ST2.동) AS RowNum,
+                COUNT(*) OVER () AS 총데이터수
+              FROM moduwww.p_aptsub MT
+              LEFT JOIN moduwww.p_apt ST1 ON MT.아파트코드 = ST1.아파트코드
+              LEFT JOIN moduwww.P_APT_호정보 ST2
+                ON ST2.아파트코드 = ST1.아파트코드
+                AND ST2.평형 = MT.평형
+                AND ST2.평형타입 = MT.평형타입
+              WHERE
+                (MT.매물등록제한여부 IN ('0','2') OR ST1.서비스노출여부 = '1')
+                AND ST1.도시 = #{addr1}
+                AND ST1.구시군 LIKE CONCAT('%', #{addr2}, '%')
+                AND ST1.읍면동 LIKE CONCAT('%', #{addr3}, '%')
+                AND ST1.아파트코드 =
+                    CASE WHEN #{complexCode} = '' THEN ST1.아파트코드 ELSE #{complexCode} END
+              GROUP BY
+                ST1.아파트코드, ST1.도시, ST1.구시군, ST1.읍면동, ST1.아파트명,
+                MT.주택형, MT.평형타입, MT.평형, ST1.총세대수, MT.세대수,
+                MT.현관구조, MT.방수, MT.욕실수, ST2.동, ST1.난방연료, ST1.난방방식,
+                ST1.입주연도, kapt_code
+              ORDER BY MT.주택형, ST2.동, MT.평형타입
+            )
+            SELECT
+              아파트코드, 도시, 구시군, 읍면동, 아파트명, 분양면적, 평형,
+              총세대수, 세대수, 현관구조, 방수, 욕실수, 동, 동호수,
+              난방연료, 난방방식, 입주연도, 총데이터수, kapt_code, pyInfo
+            FROM CTE_ApartmentInfo
+            WHERE RowNum BETWEEN (#{page} - 1) * #{pageSize} + 1
+                             AND #{page} * #{pageSize}
+            ORDER BY RowNum
+    </select>
+
+</mapper>
