@@ -44,10 +44,6 @@ public class DistrictService {
                 .map(DistrictRespDto.DistrictList::from)
                 .toList();
 
-        //int totalCount = getDistrictList.isEmpty() ? 0 : getDistrictList.get(0).totalCount();
-        //PageInfoDto pageInfo = ApiUtils.buildPageInfo(reqDto.getPage(), reqDto.getPageSize(), totalCount);
-
-//        log.info("pageInfo : {}", pageInfo);
 
         return new DistrictRespDto(districtList);
 

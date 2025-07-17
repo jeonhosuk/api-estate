@@ -5,7 +5,6 @@ import com.api.estate.api.apt.dto.ComplexRespDto;
 import com.api.estate.api.apt.service.AptComplexService;
 import com.api.estate.api.common.dto.ResponseDto;
 import com.api.estate.api.common.util.ApiUtils;
-import com.api.estate.api.district.dto.DistrictRespDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -37,13 +36,15 @@ public class AptComplexController {
     @Operation(summary = "아파트 단지 리스트", description = "아파트 단지 조회 API")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ComplexRespDto.class))}),
-            @ApiResponse(responseCode = "404", description = "조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ComplexRespDto.class))}),
+            @ApiResponse(responseCode = "404", description = "조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ResponseDto.class))}),
     })
     @GetMapping("/complexes")
     public ResponseEntity<ResponseDto> getComplex(@Parameter(description = "단지 정보") @Valid @ParameterObject ComplexReqDto reqDto) {
 
 
-        ComplexRespDto complexRespDto = aptComplexService.getComplexList(reqDto);
+        //ComplexRespDto complexRespDto = aptComplexService.getComplexList(reqDto);
+        var pageInfo = aptComplexService.getComplexList(reqDto);
+
 
         ResponseDto responseDto = ResponseDto.builder()
                 .requestParam(ResponseDto.requestParam.builder()
@@ -51,7 +52,13 @@ public class AptComplexController {
                         .status("OK")
                         .responseTime(ApiUtils.currentTime())
                         .build())
-                .document(complexRespDto)
+                .pageInfo(ResponseDto.PageInfo.builder()
+                        .page(pageInfo.page())
+                        .pageSize(pageInfo.pageSize())
+                        .totalPage(pageInfo.totalPage())
+                        .totalCount(pageInfo.totalCount())
+                        .build())
+                .document(pageInfo.list())
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }

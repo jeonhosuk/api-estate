@@ -4,12 +4,30 @@
 
     <resultMap id="aptComplexResultMap" type="com.api.estate.api.apt.vo.AptComplexVo">
         <constructor>
-            <arg column="아파트코드" javaType="java.lang.String"/>
-            <arg column="아파트명" javaType="java.lang.String"/>
-            <arg column="도시" javaType="java.lang.String"/>
-            <arg column="구시군" javaType="java.lang.String"/>
-            <arg column="읍면동" javaType="java.lang.String"/>
+            <arg name="totalCount" column="총데이터수" javaType="java.lang.Integer"/>
+            <arg name="complexCode" column="아파트코드" javaType="java.lang.String"/>
+            <arg name="complexName" column="아파트명" javaType="java.lang.String"/>
+            <arg name="addr1" column="도시" javaType="java.lang.String"/>
+            <arg name="addr2" column="구시군" javaType="java.lang.String"/>
+            <arg name="addr3" column="읍면동" javaType="java.lang.String"/>
+            <arg name="areaView" column="분양면적" javaType="java.lang.String"/>
+            <arg name="areaViewPy" column="평형" javaType="java.lang.String"/>
+            <arg name="areaSize" column="평형값" javaType="java.lang.String"/>
+            <arg name="areaSizeType" column="평형타입" javaType="java.lang.String"/>
+            <arg name="householdsCntTotal" column="총세대수" javaType="java.lang.String"/>
+            <arg name="householdsCnt" column="세대수" javaType="java.lang.String"/>
+
+            <arg name="entrance" column="현관구조" javaType="java.lang.String"/>
+            <arg name="roomCnt" column="방수" javaType="java.lang.String"/>
+            <arg name="bathroomCnt" column="욕실수" javaType="java.lang.String"/>
+            <arg name="dong" column="동" javaType="java.lang.String"/>
+            <arg name="ho" column="동호수" javaType="java.lang.String"/>
+            <arg name="heating" column="난방연료" javaType="java.lang.String"/>
+            <arg name="heatingType" column="난방방식" javaType="java.lang.String"/>
+            <arg name="moveInDate" column="입주연도" javaType="java.lang.String"/>
+
         </constructor>
+
     </resultMap>
 
     <select id="getComplexList" resultMap="aptComplexResultMap">
@@ -20,8 +38,11 @@
                 ST1.도시,
                 ST1.구시군,
                 ST1.읍면동,
-                CONCAT(CAST(CAST(ROUND(MT.주택형, 2) AS DECIMAL(10,2)) AS VARCHAR(30)) , MT.평형타입) AS 분양면적,
-                CONCAT(CAST(CAST(MT.평형 AS INT) AS VARCHAR(30)) , MT.평형타입) AS 평형,
+                CONCAT(CAST(CAST(ROUND(MT.주택형, 2) AS DECIMAL(10,2)) AS VARCHAR(30))) AS 분양면적,
+                MT.주택형 as 공급면적,
+                CONCAT(CAST(CAST(MT.평형 AS INT) AS VARCHAR(30))) AS 평형,
+                MT.평형 AS 평형값,
+                MT.평형타입,
                 ST1.총세대수,
                 MT.세대수,
                 MT.현관구조,
@@ -58,9 +79,9 @@
               ORDER BY MT.주택형, ST2.동, MT.평형타입
             )
             SELECT
-              아파트코드, 도시, 구시군, 읍면동, 아파트명, 분양면적, 평형,
-              총세대수, 세대수, 현관구조, 방수, 욕실수, 동, 동호수,
-              난방연료, 난방방식, 입주연도, 총데이터수, kapt_code, pyInfo
+            CAST(아파트코드 AS CHAR) AS 아파트코드, 도시, 구시군, 읍면동, 아파트명, 분양면적, 공급면적, 평형,
+            평형값, 평형타입, 총세대수, 세대수, 현관구조, 방수, 욕실수, 동, 동호수,
+            난방연료, 난방방식, 입주연도, 총데이터수, kapt_code, pyInfo
             FROM CTE_ApartmentInfo
             WHERE RowNum BETWEEN (#{page} - 1) * #{pageSize} + 1
                              AND #{page} * #{pageSize}

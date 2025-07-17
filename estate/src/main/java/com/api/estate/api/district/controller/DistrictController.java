@@ -19,7 +19,6 @@ import org.springdoc.core.service.GenericResponseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.awt.*;
@@ -41,7 +40,7 @@ public class DistrictController {
     @Operation(summary = "지역정보 리스트", description = "지역정보 조회 API")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DistrictRespDto.class))}),
-            @ApiResponse(responseCode = "404", description = "조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DistrictRespDto.class))}),
+            @ApiResponse(responseCode = "404", description = "조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ResponseDto.class))}),
     })
     @GetMapping("/districts")
     public ResponseEntity<ResponseDto> getDistrict(@Parameter(description = "지역 검색") @Valid @ParameterObject DistrictReqDto reqDto) {
@@ -50,13 +49,14 @@ public class DistrictController {
 
         DistrictRespDto districtRespDto = districtService.getDistrictList(reqDto);
 
+
         ResponseDto responseDto = ResponseDto.builder()
-                    .requestParam(ResponseDto.requestParam.builder()
-                    .apiDescription("지역 정보")
-                    .status("OK")
-                    .responseTime(ApiUtils.currentTime())
-                    .build())
-                .document(districtRespDto)
+                .requestParam(ResponseDto.requestParam.builder()
+                        .apiDescription("지역 정보")
+                        .status("OK")
+                        .responseTime(ApiUtils.currentTime())
+                        .build())
+                .document(districtRespDto.list())
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }

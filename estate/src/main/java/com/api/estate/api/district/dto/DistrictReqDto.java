@@ -11,11 +11,5 @@ public class DistrictReqDto {
 
     @Schema(description = "주소2(구시군)")
     private String addr2;
-
-    @Schema(description = "현재페이지")
-    private Integer page = 1;
-
-    @Schema(description = "데이터노출개수")
-    private Integer pageSize = 500;
 }
 

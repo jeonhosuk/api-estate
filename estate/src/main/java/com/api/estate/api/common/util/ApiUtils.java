@@ -4,6 +4,7 @@ import com.api.estate.api.common.dto.PageInfoDto;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class ApiUtils {
     private ApiUtils() {
@@ -37,9 +38,15 @@ public class ApiUtils {
      * @param totalCount 전체 데이터 개수
      * @return PageInfoDto (페이지 정보)
      */
-    public static PageInfoDto buildPageInfo(int page, int pageSize, int totalCount) {
+    public static<T> PageInfoDto<T> buildPageInfo(int page, int pageSize, int totalCount, List<T> list) {
         int totalPage = (int) Math.ceil((double) totalCount / pageSize);
-        return new PageInfoDto(page, pageSize, totalPage, totalCount);
+        return new PageInfoDto<>(
+                page,
+                pageSize,
+                totalPage,
+                totalCount,
+                list
+        );
     }
     
 }

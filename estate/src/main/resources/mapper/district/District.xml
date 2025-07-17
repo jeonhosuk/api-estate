@@ -5,38 +5,34 @@
     <resultMap id="districtResultMap" type="com.api.estate.api.district.vo.DistrictVo">
         <constructor>
             <arg column="districtName" javaType="java.lang.String"/>
-            <arg column="totalCount" javaType="java.lang.Integer"/>
         </constructor>
     </resultMap>
 
     <select id="getDistrictList" resultMap="districtResultMap">
         <choose>
             <when test="level eq '도시'">
-                SELECT 도시 AS districtName,
-                    COUNT(*) OVER () AS totalCount
+                SELECT 도시 AS districtName
                 FROM moduwww.주소기본정보 A
                     GROUP BY 도시
                 ORDER BY (SELECT CAST(키1 AS INT) FROM MODUWWW.코드정보 Z WHERE 항번 = '1' AND Z.내용 = A.도시)
             </when>
             <when test="level eq '구시군'">
-                SELECT 구시군 AS districtName,
-                    COUNT(*) OVER () AS totalCount
+                SELECT 구시군 AS districtName
                 FROM moduwww.주소기본정보
                     WHERE 도시 = #{addr1}
                     AND 구시군 IS NOT NULL
                     AND 구시군 != ''
                 GROUP BY 구시군
-                ORDER BY districtName;
+                ORDER BY districtName
             </when>
             <when test="level eq '읍면동'">
-                SELECT 읍면동 AS districtName,
-                    COUNT(*) OVER () AS totalCount
+                SELECT 읍면동 AS districtName
                 FROM moduwww.주소기본정보
                     WHERE 도시 = #{addr1}
                     AND 구시군 = #{addr2}
                     AND 읍면동 IS NOT NULL AND 읍면동 != ''
                 GROUP BY 읍면동
-                ORDER BY districtName;
+                ORDER BY districtName
             </when>
         </choose>
     </select>
