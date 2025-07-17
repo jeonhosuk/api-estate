@@ -17,9 +17,9 @@ spring:
             on-profile: mariadb
     datasource:
         driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-        url: jdbc:log4jdbc:mariadb://218.237.65.224:3306/modubiz
-        username: root
-        password: r114!@#
+        url: ENC(9dAVXleR/i41xMXF1c9pYlbOrHimdMMuVpyOE/LzNfso8OME/3uer5cTOfYvW1pKujm1UZPIBlXomPrBTw76sQ==)
+        username: ENC(i6SvJEJeaaPJOE5OKwL8Ww==)
+        password: ENC(Q+T1AzittshWhFuka2KvpGZRHvDs9oWN)
     jpa:
         hibernate:
             ddl-auto: update
